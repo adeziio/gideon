@@ -1,3 +1,75 @@
 .roboto-mono {
     font-family: 'Roboto Mono';
 }
+
+.header {
+    font-size: 70px;
+    color: #2e93e6;
+}
+
+.loading {
+    border-bottom: 3px double #2e93e6;
+    border-radius: 50px;
+    color: white;
+}
+
+.logs-wrapper {
+    margin-bottom: 2rem;
+}
+
+.logs-container {
+    border: 1px solid black;
+    border-radius: 50px;
+    max-height: 90%;
+    max-width: 90%;
+    left: 0;
+    right: 0; 
+    margin: auto;
+    padding: 1rem;
+    overflow-y: auto;
+    clear: both;
+}
+
+.pfp {
+    width: 40%;
+}
+
+.left {
+    float: left;
+}
+
+.input-container {
+    width: 90%;
+    left: 0;
+    right: 0; 
+    margin: auto;
+    padding: 1rem;
+}
+
+.input-box {
+    margin: 1rem !important;
+}
+
+.input-btn {
+    margin: 1rem !important;
+    width: 120px;
+}
+
+.bot-display {
+    margin-left: -7%;
+    margin-top: -2%;
+}
+
+.bot-msg-container {
+    margin-top: 2%;
+}
+
+.bot-msg {
+    border-radius: 50px;
+    border: 1px solid lightgray;
+    width: 50%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    padding: 1rem;
+}
