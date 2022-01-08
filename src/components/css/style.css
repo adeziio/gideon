@@ -56,8 +56,9 @@
 }
 
 .bot-display {
-    margin-left: -7%;
-    margin-top: -2%;
+    margin-left: -5%;
+    height: auto;
+    width: 220px;
 }
 
 .bot-msg-container {

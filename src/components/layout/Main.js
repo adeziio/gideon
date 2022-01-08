@@ -98,7 +98,7 @@ export default class Main extends Component {
                 <div className='roboto-mono header'>Gide<span><CircularProgress className="loading" color="inherit" /></span>n</div>
                 <div>
                     <div className="bot-msg-container">
-                        <div className="bot-msg">{gideonMessage}</div>
+                        <div className="roboto-mono bot-msg">{gideonMessage}</div>
                     </div>
                     <img alt="default" src={gideonGif} className='bot-display' />
                 </div>
