@@ -8,12 +8,8 @@ var ReplaceAfterFetch = [
         after: "Aden Tran"
     },
     {
-        before: "Ava",
-        after: "Master"
-    },
-    {
-        before: "female chatbot",
-        after: "male chatbot"
+        before: "female",
+        after: "male"
     }
 ]
 

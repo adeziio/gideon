@@ -6,6 +6,7 @@ import gideonImg from './../../img/0001.png';
 import silhouetteImg from './../../img/silhouette.png';
 import ReplaceBeforeFetch from '../data/ReplaceBeforeFetch';
 import ReplaceAfterFetch from '../data/ReplaceAfterFetch';
+import { fetchBrainShopAI, fetchLocation, fetchWeatherData } from './../api/api';
 
 
 export default class Main extends Component {
@@ -13,34 +14,83 @@ export default class Main extends Component {
         super(props);
         this.state = {
             yourMessage: "",
+            gideonMessage: "",
+            chatLog: [],
+            showChatLog: false
+        }
+    };
+
+    componentDidMount = () => {
+        this.setState({
             gideonMessage: "Greetings, my name is Gideon. How may I assist you?",
-            chatLogs: [
+            chatLog: [
                 {
                     name: "Gideon",
                     message: "Greetings, my name is Gideon. How may I assist you?"
                 }
             ],
-            showChatLogs: false
+        })
+    }
+
+    handleMessageSubmit = async () => {
+        if (this.state.yourMessage !== "") {
+            this.addToChatLog({ name: "You", message: this.state.yourMessage }, () => this.setState({ yourMessage: "" }));
+            let newYourMsg = this.massageMessage(ReplaceBeforeFetch, this.state.yourMessage);
+            if (newYourMsg.includes("weather")) {
+                if (newYourMsg.includes("in")) {
+                    newYourMsg = newYourMsg.substring(newYourMsg.indexOf("in") + 3);
+                    let weather = await fetchWeatherData(newYourMsg);
+                    let newGideonMsg = `The weather is ${weather.current.condition.text} in ${weather.location.name}, ${weather.location.region} ${weather.location.country}`;
+                    this.addNewGideonMessage(newGideonMsg);
+                }
+                else {
+                    let yourLocation = await fetchLocation();
+                    let weather = await fetchWeatherData(yourLocation.zipCode);
+                    let newGideonMsg = `The weather is ${weather.current.condition.text} at your location in ${weather.location.name}, ${weather.location.region} ${weather.location.country}`;
+                    this.addNewGideonMessage(newGideonMsg);
+                }
+            }
+            else if (newYourMsg.includes("my current location") ||
+                newYourMsg.includes("my location") ||
+                newYourMsg.includes("where am I") ||
+                newYourMsg.includes("where am I") ||
+                newYourMsg.includes("where do I live")
+            ) {
+                let yourLocation = await fetchLocation();
+                let newGideonMsg = `You are located in ${yourLocation.city}, ${yourLocation.state} ${yourLocation.countryISO3}`;
+                this.addNewGideonMessage(newGideonMsg);
+            }
+            else if (newYourMsg.includes("my ip")) {
+                let yourLocation = await fetchLocation();
+                let newGideonMsg = `You ip address is ${yourLocation.ip}`;
+                this.addNewGideonMessage(newGideonMsg);
+            }
+            else {
+                let brainShopAIRes = await fetchBrainShopAI(newYourMsg);
+                let newGideonMsg = this.massageMessage(ReplaceAfterFetch, brainShopAIRes.cnt);
+                this.addNewGideonMessage(newGideonMsg);
+            }
         }
-    };
+    }
+
+    addNewGideonMessage = (msg) => {
+        this.setState({
+            gideonMessage: msg
+        }, () => {
+            this.addToChatLog({ name: "Gideon", message: msg })
+        })
+    }
+
+    addToChatLog = (obj, callback) => {
+        this.setState((prevState) => ({
+            chatLog: [...prevState.chatLog, obj]
+        }), callback)
+    }
 
     handleMessageChange = (e) => {
         this.setState({
             yourMessage: e.target.value
         })
-    }
-
-    handleMessageSubmit = () => {
-        if (this.state.yourMessage !== "") {
-            this.addToChatLogs({ name: "You", message: this.state.yourMessage }, () => this.setState({ yourMessage: "" }));
-            this.massageYourMessage(this.state.yourMessage);
-        }
-    }
-
-    addToChatLogs = (obj, callback) => {
-        this.setState((prevState) => ({
-            chatLogs: [...prevState.chatLogs, obj]
-        }), callback)
     }
 
     _handleKeyDown = (e) => {
@@ -49,50 +99,24 @@ export default class Main extends Component {
         }
     }
 
-    handleShowChatLogs = () => {
+    handleShowChatLog = () => {
         this.setState((prevState) => ({
-            showChatLogs: !prevState.showChatLogs
+            showChatLog: !prevState.showChatLog
         }));
     }
 
-    fetchBrainShopAIResponse = (msg) => {
-        fetch(`https://acobot-brainshop-ai-v1.p.rapidapi.com/get?bid=${process.env.REACT_APP_BRAINSHOP_AI_ID}&key=${process.env.REACT_APP_BRAINSHOP_AI_KEY}&uid=${process.env.REACT_APP_BRAINSHOP_AI_UID}&msg=${msg}`, {
-            "method": "GET",
-            "headers": {
-                "x-rapidapi-host": "acobot-brainshop-ai-v1.p.rapidapi.com",
-                "x-rapidapi-key": process.env.REACT_APP_RAPID_API_KEY
-            }
-        })
-            .then(response => response.json())
-            .then(resData => this.massageGideonMessage(resData.cnt))
-    }
-
-    massageYourMessage = (msg) => {
+    massageMessage = (dataList, msg) => {
         let newMsg = msg;
-        ReplaceBeforeFetch.forEach((item) => {
-            if (newMsg.toLowerCase().includes(item.before)) {
+        dataList.forEach((item) => {
+            if (newMsg.toLowerCase().includes(item.before) || newMsg.includes(item.before)) {
                 newMsg = newMsg.replaceAll(item.before, item.after)
             }
         })
-        this.fetchBrainShopAIResponse(newMsg);
-    }
-
-    massageGideonMessage = (msg) => {
-        let newMsg = msg;
-        ReplaceAfterFetch.forEach((item) => {
-            if (newMsg.includes(item.before)) {
-                newMsg = newMsg.replaceAll(item.before, item.after)
-            }
-        })
-        this.setState({
-            gideonMessage: newMsg
-        }, () => {
-            this.addToChatLogs({ name: "Gideon", message: newMsg })
-        })
+        return newMsg;
     }
 
     render() {
-        const { chatLogs, showChatLogs, yourMessage, gideonMessage } = this.state;
+        const { chatLog, showChatLog, yourMessage, gideonMessage } = this.state;
         return (
             <>
                 <div className='roboto-mono header'>Gide<span><CircularProgress className="loading" color="inherit" /></span>n</div>
@@ -107,14 +131,14 @@ export default class Main extends Component {
                         <TextField label="You" variant="outlined" onChange={this.handleMessageChange} onKeyDown={this._handleKeyDown} value={yourMessage} />
                     </FormControl>
                     <Button className="input-btn" variant="contained" onClick={this.handleMessageSubmit}>Enter</Button>
-                    <Button className="input-btn" variant="outlined" onClick={this.handleShowChatLogs}>Chat Logs</Button>
+                    <Button className="input-btn" variant="outlined" onClick={this.handleShowChatLog}>Chat Log</Button>
                 </div>
 
-                {showChatLogs ?
+                {showChatLog ?
                     <div className="logs-wrapper">
                         <div className="logs-container">
                             <Container fixed>
-                                {chatLogs && showChatLogs ? chatLogs.map((item, index) =>
+                                {chatLog && showChatLog ? chatLog.map((item, index) =>
                                     <Grid container spacing={2} margin="1rem">
                                         <Grid item xs={2}>
                                             <img alt="default" src={item.name === "Gideon" ? gideonImg : silhouetteImg} className='pfp left' />
