@@ -36,8 +36,8 @@ export default class Main extends Component {
         if (this.state.yourMessage !== "") {
             this.addToChatLog({ name: "You", message: this.state.yourMessage }, () => this.setState({ yourMessage: "" }));
             let newYourMsg = this.massageMessage(ReplaceBeforeFetch, this.state.yourMessage);
-            if (newYourMsg.includes("weather")) {
-                if (newYourMsg.includes("in")) {
+            if (newYourMsg.toLowerCase().includes("weather")) {
+                if (newYourMsg.toLowerCase().includes("in")) {
                     newYourMsg = newYourMsg.substring(newYourMsg.indexOf("in") + 3);
                     let weather = await fetchWeatherData(newYourMsg);
                     let newGideonMsg = `The weather is ${weather.current.condition.text} in ${weather.location.name}, ${weather.location.region} ${weather.location.country}`;
@@ -50,17 +50,16 @@ export default class Main extends Component {
                     this.addNewGideonMessage(newGideonMsg);
                 }
             }
-            else if (newYourMsg.includes("my current location") ||
-                newYourMsg.includes("my location") ||
-                newYourMsg.includes("where am I") ||
-                newYourMsg.includes("where am I") ||
-                newYourMsg.includes("where do I live")
+            else if (newYourMsg.toLowerCase().includes("my current location") ||
+                newYourMsg.toLowerCase().includes("my location") ||
+                newYourMsg.toLowerCase().includes("where am i") ||
+                newYourMsg.toLowerCase().includes("where do i live")
             ) {
                 let yourLocation = await fetchLocation();
                 let newGideonMsg = `You are located in ${yourLocation.city}, ${yourLocation.state} ${yourLocation.countryISO3}`;
                 this.addNewGideonMessage(newGideonMsg);
             }
-            else if (newYourMsg.includes("ip")) {
+            else if (newYourMsg.toLowerCase().includes("ip")) {
                 let yourLocation = await fetchLocation();
                 let newGideonMsg = `Your ip address is ${yourLocation.ip}`;
                 this.addNewGideonMessage(newGideonMsg);
