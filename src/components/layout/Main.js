@@ -60,9 +60,9 @@ export default class Main extends Component {
                 let newGideonMsg = `You are located in ${yourLocation.city}, ${yourLocation.state} ${yourLocation.countryISO3}`;
                 this.addNewGideonMessage(newGideonMsg);
             }
-            else if (newYourMsg.includes("my ip")) {
+            else if (newYourMsg.includes("ip")) {
                 let yourLocation = await fetchLocation();
-                let newGideonMsg = `You ip address is ${yourLocation.ip}`;
+                let newGideonMsg = `Your ip address is ${yourLocation.ip}`;
                 this.addNewGideonMessage(newGideonMsg);
             }
             else {
