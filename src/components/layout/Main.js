@@ -119,7 +119,7 @@ export default class Main extends Component {
         const { chatLog, showChatLog, yourMessage, gideonMessage } = this.state;
         return (
             <>
-                <div className='roboto-mono header'>Gide<span><CircularProgress className="loading" color="inherit" /></span>n</div>
+                <div className='roboto-mono header' onClick={() => window.location.reload()}>Gide<span><CircularProgress className="loading" color="inherit" /></span>n</div>
                 <div>
                     <div className="bot-msg-container">
                         <div className="roboto-mono bot-msg">{gideonMessage}</div>

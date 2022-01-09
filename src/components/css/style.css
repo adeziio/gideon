@@ -7,6 +7,10 @@
     color: #2e93e6;
 }
 
+.header:hover {
+    cursor: pointer;
+}
+
 .loading {
     border-bottom: 3px double #2e93e6;
     border-radius: 50px;
