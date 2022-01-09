@@ -6,6 +6,10 @@ var ReplaceBeforeFetch = [
     {
         before: "male",
         after: "female"
+    },
+    {
+        before: "+",
+        after: "%2B"
     }
 ]
 
