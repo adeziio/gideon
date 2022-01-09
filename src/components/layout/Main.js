@@ -7,6 +7,7 @@ import silhouetteImg from './../../img/silhouette.png';
 import ReplaceBeforeFetch from '../data/ReplaceBeforeFetch';
 import ReplaceAfterFetch from '../data/ReplaceAfterFetch';
 import { fetchBrainShopAI, fetchLocation, fetchWeatherData } from './../api/api';
+import parse from 'html-react-parser';
 
 
 export default class Main extends Component {
@@ -76,7 +77,7 @@ export default class Main extends Component {
         this.setState({
             gideonMessage: msg
         }, () => {
-            this.addToChatLog({ name: "Gideon", message: msg })
+            this.addToChatLog({ name: "Gideon", message: msg });
         })
     }
 
@@ -108,7 +109,7 @@ export default class Main extends Component {
         let newMsg = msg;
         dataList.forEach((item) => {
             if (newMsg.toLowerCase().includes(item.before) || newMsg.includes(item.before)) {
-                newMsg = newMsg.replaceAll(item.before, item.after)
+                newMsg = newMsg.replaceAll(item.before, item.after);
             }
         })
         return newMsg;
@@ -116,12 +117,13 @@ export default class Main extends Component {
 
     render() {
         const { chatLog, showChatLog, yourMessage, gideonMessage } = this.state;
+
         return (
             <>
                 <div className='roboto-mono header' onClick={() => window.location.reload()}>Gide<span><CircularProgress className="loading" color="inherit" /></span>n</div>
                 <div>
                     <div className="bot-msg-container">
-                        <div className="roboto-mono bot-msg">{gideonMessage}</div>
+                        <div className="roboto-mono bot-msg">{parse(gideonMessage)}</div>
                     </div>
                     <img alt="default" src={gideonGif} className='bot-display' />
                 </div>
