@@ -17,7 +17,8 @@ export default class Main extends Component {
             yourMessage: "",
             gideonMessage: "",
             chatLog: [],
-            showChatLog: false
+            showChatLog: false,
+            isLoadingMsg: false,
         }
     };
 
@@ -35,6 +36,9 @@ export default class Main extends Component {
 
     handleMessageSubmit = async () => {
         if (this.state.yourMessage !== "") {
+            this.setState({
+                isLoadingMsg: true
+            })
             this.addToChatLog({ name: "You", message: this.state.yourMessage }, () => this.setState({ yourMessage: "" }));
             let newYourMsg = this.massageMessage(ReplaceBeforeFetch, this.state.yourMessage);
             if (newYourMsg.toLowerCase().includes("weather")) {
@@ -75,7 +79,8 @@ export default class Main extends Component {
 
     addNewGideonMessage = (msg) => {
         this.setState({
-            gideonMessage: msg
+            gideonMessage: msg,
+            isLoadingMsg: false
         }, () => {
             this.addToChatLog({ name: "Gideon", message: msg });
         })
@@ -116,14 +121,14 @@ export default class Main extends Component {
     }
 
     render() {
-        const { chatLog, showChatLog, yourMessage, gideonMessage } = this.state;
+        const { chatLog, showChatLog, yourMessage, gideonMessage, isLoadingMsg } = this.state;
 
         return (
             <>
                 <div className='roboto-mono header' onClick={() => window.location.reload()}>Gide<span><CircularProgress className="loading" color="inherit" /></span>n</div>
                 <div>
                     <div className="bot-msg-container">
-                        <div className="roboto-mono bot-msg">{parse(gideonMessage)}</div>
+                        <div className="roboto-mono bot-msg">{isLoadingMsg ? <CircularProgress className="loading" color="inherit" /> : parse(gideonMessage)}</div>
                     </div>
                     <img alt="default" src={gideonGif} className='bot-display' />
                 </div>
