@@ -1,10 +1,20 @@
-export const fetchBrainShopAI = async (msg) => {
-    const res = await fetch(`https://acobot-brainshop-ai-v1.p.rapidapi.com/get?bid=${process.env.REACT_APP_BRAINSHOP_AI_ID}&key=${process.env.REACT_APP_BRAINSHOP_AI_KEY}&uid=${process.env.REACT_APP_BRAINSHOP_AI_UID}&msg=${msg}`, {
-        "method": "GET",
+export const fetchChatBot = async (msg) => {
+    const res = await fetch(`https://robomatic-ai.p.rapidapi.com/api.php`, {
+        "method": "POST",
         "headers": {
-            "x-rapidapi-host": "acobot-brainshop-ai-v1.p.rapidapi.com",
+            'content-type': 'application/x-www-form-urlencoded',
+            'X-RapidAPI-Host': 'robomatic-ai.p.rapidapi.com',
             "x-rapidapi-key": process.env.REACT_APP_RAPID_API_KEY
-        }
+        },
+        "body": new URLSearchParams({
+            in: msg,
+            op: 'in',
+            cbot: '1',
+            SessionID: 'RapidAPI1',
+            ChatSource: 'RapidAPI',
+            cbid: '1',
+            key: process.env.REACT_APP_ROBOMATIC_KEY
+        })
     })
     return await res.json()
 }

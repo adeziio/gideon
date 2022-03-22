@@ -6,7 +6,7 @@ import gideonImg from './../../img/0001.png';
 import silhouetteImg from './../../img/silhouette.png';
 import ReplaceBeforeFetch from '../data/ReplaceBeforeFetch';
 import ReplaceAfterFetch from '../data/ReplaceAfterFetch';
-import { fetchBrainShopAI, fetchLocation, fetchWeatherData } from './../api/api';
+import { fetchChatBot, fetchLocation, fetchWeatherData } from './../api/api';
 import parse from 'html-react-parser';
 
 
@@ -66,8 +66,8 @@ export default class Main extends Component {
                 this.addNewGideonMessage(newGideonMsg);
             }
             else {
-                let brainShopAIRes = await fetchBrainShopAI(newYourMsg);
-                let newGideonMsg = this.massageMessage(ReplaceAfterFetch, brainShopAIRes.cnt);
+                let chatBot = await fetchChatBot(newYourMsg);
+                let newGideonMsg = this.massageMessage(ReplaceAfterFetch, chatBot.out);
                 this.addNewGideonMessage(newGideonMsg);
             }
         }
