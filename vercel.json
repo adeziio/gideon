@@ -1,0 +1,8 @@
+{
+    "rewrites": [
+        {
+            "source": "/:match*",
+            "destination": "https://gideon-ai.vercel.app/:match*"
+        }
+    ]
+}

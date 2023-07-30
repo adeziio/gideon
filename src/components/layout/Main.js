@@ -71,7 +71,7 @@ export default class Main extends Component {
             }
             else {
                 let chatBot = await fetchChatBot(newYourMsg);
-                let newGideonMsg = this.massageMessage(ReplaceAfterFetch, chatBot.out);
+                let newGideonMsg = this.massageMessage(ReplaceAfterFetch, chatBot.response);
                 this.addNewGideonMessage(newGideonMsg);
             }
         }
