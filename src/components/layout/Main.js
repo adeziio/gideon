@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import './../css/style.css';
+import '../css/style.css';
 import { Container, CircularProgress, Grid, TextField, FormControl, Button } from '@mui/material';
-import gideonGif from './../../gif/0001.gif';
-import gideonImg from './../../img/0001.png';
-import silhouetteImg from './../../img/silhouette.png';
-import ReplaceBeforeFetch from '../data/ReplaceBeforeFetch';
-import ReplaceAfterFetch from '../data/ReplaceAfterFetch';
-import { fetchChatBot, fetchLocation, fetchWeatherData } from './../api/api';
+import gideonGif from '../gif/0001.gif';
+import gideonImg from '../img/0001.png';
+import silhouetteImg from '../img/silhouette.png';
+import { fetchChatBot } from '../api/api';
 import parse from 'html-react-parser';
 
 
@@ -40,40 +38,9 @@ export default class Main extends Component {
                 isLoadingMsg: true
             })
             this.addToChatLog({ name: "You", message: this.state.yourMessage }, () => this.setState({ yourMessage: "" }));
-            let newYourMsg = this.massageMessage(ReplaceBeforeFetch, this.state.yourMessage);
-            if (newYourMsg.toLowerCase().includes("weather")) {
-                if (newYourMsg.toLowerCase().includes("in")) {
-                    newYourMsg = newYourMsg.substring(newYourMsg.indexOf("in") + 3);
-                    let weather = await fetchWeatherData(newYourMsg);
-                    let newGideonMsg = `The weather is ${weather.current.condition.text} in ${weather.location.name}, ${weather.location.region} ${weather.location.country}`;
-                    this.addNewGideonMessage(newGideonMsg);
-                }
-                else {
-                    let yourLocation = await fetchLocation();
-                    let weather = await fetchWeatherData(yourLocation.zipCode);
-                    let newGideonMsg = `The weather is ${weather.current.condition.text} at your location in ${weather.location.name}, ${weather.location.region} ${weather.location.country}`;
-                    this.addNewGideonMessage(newGideonMsg);
-                }
-            }
-            else if (newYourMsg.toLowerCase().includes("my current location") ||
-                newYourMsg.toLowerCase().includes("my location") ||
-                newYourMsg.toLowerCase().includes("where am i") ||
-                newYourMsg.toLowerCase().includes("where do i live")
-            ) {
-                let yourLocation = await fetchLocation();
-                let newGideonMsg = `You are located in ${yourLocation.city}, ${yourLocation.state} ${yourLocation.countryISO3}`;
-                this.addNewGideonMessage(newGideonMsg);
-            }
-            else if (newYourMsg.toLowerCase().includes("ip")) {
-                let yourLocation = await fetchLocation();
-                let newGideonMsg = `Your ip address is ${yourLocation.ip}`;
-                this.addNewGideonMessage(newGideonMsg);
-            }
-            else {
-                let chatBot = await fetchChatBot(newYourMsg);
-                let newGideonMsg = this.massageMessage(ReplaceAfterFetch, chatBot.response);
-                this.addNewGideonMessage(newGideonMsg);
-            }
+            let newYourMsg = this.state.yourMessage;
+            let chatBot = await fetchChatBot(newYourMsg);
+            this.addNewGideonMessage(chatBot.response);
         }
     }
 
@@ -108,16 +75,6 @@ export default class Main extends Component {
         this.setState((prevState) => ({
             showChatLog: !prevState.showChatLog
         }));
-    }
-
-    massageMessage = (dataList, msg) => {
-        let newMsg = msg;
-        dataList.forEach((item) => {
-            if (newMsg.toLowerCase().includes(item.before) || newMsg.includes(item.before)) {
-                newMsg = newMsg.replaceAll(item.before, item.after);
-            }
-        })
-        return newMsg;
     }
 
     render() {
