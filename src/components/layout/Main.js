@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import '../css/style.css';
-import { Container, CircularProgress, Grid, TextField, FormControl, Button } from '@mui/material';
+import { Container, CircularProgress, Grid, TextField, FormControl, Button, Card, CardActionArea, CardMedia, ImageListItem, Link } from '@mui/material';
 import gideonGif from '../gif/0001.gif';
 import gideonImg from '../img/0001.png';
 import silhouetteImg from '../img/silhouette.png';
@@ -15,7 +15,6 @@ export default class Main extends Component {
             yourMessage: "",
             gideonMessage: "",
             chatLog: [],
-            showChatLog: false,
             isLoadingMsg: false,
         }
     };
@@ -49,7 +48,7 @@ export default class Main extends Component {
             gideonMessage: msg,
             isLoadingMsg: false
         }, () => {
-            this.addToChatLog({ name: "Gideon", message: msg });
+            this.addToChatLog({ name: "Gideon", message: this.displayMessage(msg) });
         })
     }
 
@@ -71,56 +70,72 @@ export default class Main extends Component {
         }
     }
 
-    handleShowChatLog = () => {
-        this.setState((prevState) => ({
-            showChatLog: !prevState.showChatLog
-        }));
+    displayMessage = (msg) => {
+        if (msg.includes("https://")) {
+            return (
+                <Link href={msg} underline="none" target="_blank">
+                    <Card sx={{ height: "auto", width: "100%", maxWidth: "400px", display: "inline-block" }} elevation={5} >
+                        <CardActionArea>
+                            <CardMedia
+                                component="img"
+                                width="100%"
+                                image={msg}
+                                alt=""
+                            />
+                        </CardActionArea>
+                    </Card>
+                </Link>
+            )
+        }
+        else {
+            return (parse(msg))
+        }
+    }
+
+    loadingMessage = () => {
+        return (
+            <CircularProgress className="loading" color="inherit" />
+        )
     }
 
     render() {
-        const { chatLog, showChatLog, yourMessage, gideonMessage, isLoadingMsg } = this.state;
+        const { chatLog, yourMessage, gideonMessage, isLoadingMsg } = this.state;
+        console.log(gideonMessage)
 
         return (
             <>
-                <div className='roboto-mono header' onClick={() => window.location.reload()}>Gide<span><CircularProgress className="loading" color="inherit" /></span>n</div>
-                <div>
-                    <div className="bot-msg-container">
-                        <div className="roboto-mono bot-msg">{isLoadingMsg ? <CircularProgress className="loading" color="inherit" /> : parse(gideonMessage)}</div>
-                    </div>
-                    <img alt="default" src={gideonGif} className='bot-display' />
+                <div className='roboto-mono header' onClick={() => window.location.reload()}>
+                    G<span><img alt="default" src={gideonGif} className='bot-display' /></span>de<span><CircularProgress className="loading" color="inherit" /></span>n
                 </div>
-                <div className="input-container">
-                    <FormControl fullWidth className="input-box">
-                        <TextField label="You" variant="outlined" onChange={this.handleMessageChange} onKeyDown={this._handleKeyDown} value={yourMessage} />
-                    </FormControl>
-                    <Button className="input-btn" variant="contained" onClick={this.handleMessageSubmit}>Enter</Button>
-                    <Button className="input-btn" variant="outlined" onClick={this.handleShowChatLog}>Chat Log</Button>
-                </div>
-
-                {showChatLog ?
-                    <div className="logs-wrapper">
-                        <div className="logs-container">
-                            <Container fixed>
-                                {chatLog && showChatLog ? chatLog.map((item, index) =>
-                                    <Grid container spacing={2} margin="1rem">
-                                        <Grid item xs={2}>
-                                            <img alt="default" src={item.name === "Gideon" ? gideonImg : silhouetteImg} className='pfp left' />
-                                        </Grid>
-                                        <Grid item xs={2}>
-                                            <div className='left'>{`${item.name}:`}</div>
-                                        </Grid>
-                                        <Grid item xs={8}>
-                                            <div className='roboto-mono left'>{item.message}</div>
-                                        </Grid>
+                <div className="logs-wrapper">
+                    <div className="logs-container">
+                        <Container fixed>
+                            {chatLog ? chatLog.map((item, index) =>
+                                <Grid container spacing={2} margin="1rem">
+                                    <Grid item xs={2}>
+                                        <img alt="default" src={item.name === "Gideon" ? gideonImg : silhouetteImg} className='pfp left' />
                                     </Grid>
-                                ) : null}
-                            </Container>
-                            <div style={{ float: "left", clear: "both" }}
-                                ref={(el) => { this.messagesEnd = el; }}>
-                            </div>
-                        </div >
-                    </div> : null
-                }
+                                    <Grid item xs={2}>
+                                        <div className='left'>{`${item.name}:`}</div>
+                                    </Grid>
+                                    <Grid item xs={8}>
+                                        <div className='roboto-mono left'>{item.message}</div>
+                                    </Grid>
+                                </Grid>
+                            ) : null}
+                        </Container>
+                        <div style={{ float: "left", clear: "both" }}
+                            ref={(el) => { this.messagesEnd = el; }}>
+                        </div>
+                    </div >
+                </div>
+                {isLoadingMsg ? <CircularProgress className="loading" color="inherit" /> : null}
+                <div className="input-container">
+                    <FormControl fullWidth>
+                        <TextField sx={{ marginBottom: "1rem" }} label="You" variant="outlined" onChange={this.handleMessageChange} onKeyDown={this._handleKeyDown} value={yourMessage} />
+                    </FormControl>
+                    <Button fullWidth sx={{ padding: "1rem" }} variant="contained" onClick={this.handleMessageSubmit}>Enter</Button>
+                </div>
             </>
         )
     }

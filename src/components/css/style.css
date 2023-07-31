@@ -18,7 +18,7 @@
 }
 
 .logs-wrapper {
-    margin-bottom: 2rem;
+    height: 30rem;
 }
 
 .logs-container {
@@ -27,7 +27,7 @@
     max-height: 90%;
     max-width: 90%;
     left: 0;
-    right: 0; 
+    right: 0;
     margin: auto;
     padding: 1rem;
     overflow-y: auto;
@@ -45,28 +45,14 @@
 .input-container {
     width: 90%;
     left: 0;
-    right: 0; 
+    right: 0;
     margin: auto;
-    padding: 1rem;
-}
-
-.input-box {
-    margin: 1rem !important;
-}
-
-.input-btn {
-    margin: 1rem !important;
-    width: 120px;
 }
 
 .bot-display {
-    margin-left: -5%;
+    margin-left: -1rem;
     height: auto;
-    width: 220px;
-}
-
-.bot-msg-container {
-    margin-top: 2%;
+    width: 50px;
 }
 
 .bot-msg {
