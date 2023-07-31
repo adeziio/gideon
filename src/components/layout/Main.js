@@ -10,9 +10,7 @@ import parse from 'html-react-parser';
 
 const Main = (props) => {
     const [input, setInput] = useState("");
-    const [chatLog, setChatLog] = useState(
-        []
-    );
+    const [chatLog, setChatLog] = useState([]);
     const [isLoadingMsg, setIsLoadingMsg] = useState(false);
     const ref = useRef(null);
 
@@ -21,7 +19,7 @@ const Main = (props) => {
             [
                 {
                     name: "Gideon",
-                    message: "Greetings, my name is Gideon. How may I assist you?"
+                    message: "Greetings, how may I assist you?"
                 }
             ]
         )
