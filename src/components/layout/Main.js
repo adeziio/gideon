@@ -94,13 +94,16 @@ const Main = (props) => {
                     {chatLog ? chatLog.map((item, index) =>
                         <Grid container spacing={2} ref={ref}>
                             <Grid item xs={2}>
-                                <img alt="default" src={item.name === "Gideon" ? gideonImg : silhouetteImg} className='pfp left' />
-                            </Grid>
-                            <Grid item xs={2}>
-                                <div className='left'>{`${item.name}:`}</div>
+                                <img style={{ width: "2rem" }} alt="default" src={item.name === "Gideon" ? gideonImg : silhouetteImg} />
+                                {item.name === "Gideon" ?
+                                    <div style={{ fontWeight: "bold", color: "#1976d2" }}>{`${item.name}:`}</div>
+                                    : <div style={{ fontWeight: "bold" }}>{`${item.name}:`}</div>}
                             </Grid>
                             <Grid item xs={8}>
-                                <div className='roboto-mono left'>{item.message}</div>
+                                {item.name === "Gideon" ?
+                                    <div className='roboto-mono' style={{ color: "#1976d2" }}>{item.message}</div>
+                                    : <div className='roboto-mono'>{item.message}</div>
+                                }
                             </Grid>
                         </Grid>
                     ) : null}
