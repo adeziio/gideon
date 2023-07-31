@@ -17,18 +17,15 @@
     color: white;
 }
 
-.logs-wrapper {
-    height: 30rem;
-}
-
 .logs-container {
     border: 1px solid black;
     border-radius: 50px;
-    max-height: 90%;
+    height: 28rem;
     max-width: 90%;
     left: 0;
     right: 0;
     margin: auto;
+    margin-bottom: 1rem;
     padding: 1rem;
     overflow-y: auto;
     clear: both;
