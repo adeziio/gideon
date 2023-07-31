@@ -92,7 +92,7 @@ const Main = (props) => {
             <div className="logs-container" ref={ref}>
                 <Container fixed >
                     {chatLog ? chatLog.map((item, index) =>
-                        <Grid container spacing={2} margin="1rem" ref={ref}>
+                        <Grid container spacing={2} ref={ref}>
                             <Grid item xs={2}>
                                 <img alt="default" src={item.name === "Gideon" ? gideonImg : silhouetteImg} className='pfp left' />
                             </Grid>
