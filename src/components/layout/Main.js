@@ -9,6 +9,7 @@ import parse from 'html-react-parser';
 
 
 const Main = (props) => {
+    const [auth, setAuth] = useState(false);
     const [input, setInput] = useState("");
     const [chatLog, setChatLog] = useState([]);
     const [isLoadingMsg, setIsLoadingMsg] = useState(false);
@@ -19,25 +20,42 @@ const Main = (props) => {
             [
                 {
                     name: "Gideon",
-                    message: "Greetings, how may I assist you?"
+                    message: "Enter the password to proceed."
                 }
             ]
         )
     }, [])
 
     const handleMessageSubmit = async () => {
-        if (input !== "") {
-            setIsLoadingMsg({ isLoadingMsg: true });
-            addToChatLog({ name: "You", message: input });
-            setInput("")
-            let chatBot = await fetchChatBot(input);
-            if (chatBot) {
-                addNewGideonMessage(chatBot['output']);
-            }
-            else {
-                addNewGideonMessage("Sorry, I don't understand.")
+        if (auth) {
+            if (input !== "") {
+                setIsLoadingMsg({ isLoadingMsg: true });
+                addToChatLog({ name: "You", message: input });
+                setInput("")
+                let chatBot = await fetchChatBot(input);
+                if (chatBot) {
+                    addNewGideonMessage(chatBot['output']);
+                }
+                else {
+                    addNewGideonMessage("Sorry, Gideon is offline.")
+                }
             }
         }
+        else {
+            if (input !== "") {
+                setIsLoadingMsg({ isLoadingMsg: true });
+                addToChatLog({ name: "You", message: input });
+                setInput("")
+                if (input === "babyblue") {
+                    setAuth(true);
+                    addNewGideonMessage("Greetings, how may I assist you?")
+                }
+                else {
+                    addNewGideonMessage("Sorry, incorrect password.")
+                }
+            }
+        }
+
         ref.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
 
