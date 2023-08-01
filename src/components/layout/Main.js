@@ -32,7 +32,7 @@ const Main = (props) => {
                 setIsLoadingMsg({ isLoadingMsg: true });
                 addToChatLog({ name: "You", message: input });
                 setInput("")
-                let chatBot = await fetchChatBot(input);
+                let chatBot = await fetchChatBot(input.trim());
                 if (chatBot) {
                     addNewGideonMessage(chatBot['output']);
                 }
@@ -46,7 +46,7 @@ const Main = (props) => {
                 setIsLoadingMsg({ isLoadingMsg: true });
                 addToChatLog({ name: "You", message: input });
                 setInput("")
-                if (input === "🍊") {
+                if (input.trim() === "🍊") {
                     setAuth(true);
                     addNewGideonMessage("Greetings, how may I assist you?")
                 }
@@ -69,7 +69,7 @@ const Main = (props) => {
     }
 
     const handleMessageChange = (e) => {
-        setInput(e.target.value.trim());
+        setInput(e.target.value);
     }
 
     const _handleKeyDown = (e) => {
