@@ -69,7 +69,7 @@ const Main = (props) => {
     }
 
     const handleMessageChange = (e) => {
-        setInput(e.target.value);
+        setInput(e.target.value.trim());
     }
 
     const _handleKeyDown = (e) => {
