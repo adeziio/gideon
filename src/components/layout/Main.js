@@ -32,7 +32,7 @@ const Main = (props) => {
             setInput("")
             let chatBot = await fetchChatBot(input);
             if (chatBot) {
-                addNewGideonMessage(chatBot.response);
+                addNewGideonMessage(chatBot['output']);
             }
             else {
                 addNewGideonMessage("Sorry, I don't understand.")
