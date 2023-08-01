@@ -4,6 +4,7 @@ export const fetchChatBot = async (msg) => {
     const res = await fetch(`${domain}/gpt-3.5-turbo`, {
         "method": "POST",
         "headers": {
+            "Content-Type": "application/json",
             "GIDEON_API_KEY": process.env.REACT_APP_GIDEON_API_KEY
         },
         "body": JSON.stringify({
