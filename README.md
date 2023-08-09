@@ -1,4 +1,4 @@
-# Demo - https://gideon-ai.vercel.app/
+# Demo - https://gideon-chat.vercel.app/
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
