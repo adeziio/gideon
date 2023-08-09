@@ -50,7 +50,7 @@ const Main = (props) => {
                 setIsLoadingMsg({ isLoadingMsg: true });
                 addToChatLog({ name: "You", message: input });
                 setInput("")
-                if (input.trim() === "🍊") {
+                if (input.trim() === "🍊" || input.trim() === "orange") {
                     setAuth(true);
                     addNewGideonMessage("Greetings, how may I assist you?")
                 }
