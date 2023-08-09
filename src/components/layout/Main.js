@@ -32,7 +32,11 @@ const Main = (props) => {
                 setIsLoadingMsg({ isLoadingMsg: true });
                 addToChatLog({ name: "You", message: input });
                 setInput("")
-                let chatBot = await fetchChatBot(input.trim());
+                let model = "language";
+                if (input.trim().includes("image")) {
+                    model = "image";
+                }
+                let chatBot = await fetchChatBot(model, input.trim());
                 if (chatBot) {
                     addNewGideonMessage(chatBot['output']);
                 }

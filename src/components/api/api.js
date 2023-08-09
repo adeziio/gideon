@@ -1,6 +1,6 @@
 const domain = process.env.REACT_APP_ENV === "prod" ? "https://gideon-ai.vercel.app" : "http://127.0.0.1:5000";
 
-export const fetchChatBot = async (msg) => {
+export const fetchChatBot = async (model, input) => {
     const res = await fetch(`${domain}/gpt-3.5-turbo`, {
         "method": "POST",
         "headers": {
@@ -8,7 +8,8 @@ export const fetchChatBot = async (msg) => {
             "GIDEON_API_KEY": process.env.REACT_APP_GIDEON_API_KEY
         },
         "body": JSON.stringify({
-            "input": msg
+            "model": model,
+            "input": input
         })
     })
     return await res.json()
